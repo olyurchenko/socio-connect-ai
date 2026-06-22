@@ -30,6 +30,30 @@ variable "subdomain" {
   default     = "calendar"
 }
 
+variable "github_owner" {
+  description = "GitHub repository owner (username or org)"
+  type        = string
+  default     = "olyurchenko"
+}
+
+variable "github_repo" {
+  description = "GitHub repository name"
+  type        = string
+  default     = "socio-connect-ai"
+}
+
+variable "github_branch" {
+  description = "GitHub branch to watch — pipeline triggers on every push to this branch"
+  type        = string
+  default     = "master"
+}
+
+variable "nx_app_name" {
+  description = "Nx application name to build and deploy"
+  type        = string
+  default     = "calendar-app"
+}
+
 variable "cloudfront_price_class" {
   description = "CloudFront price class"
   type        = string

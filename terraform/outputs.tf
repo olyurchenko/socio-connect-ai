@@ -22,3 +22,18 @@ output "acm_certificate_arn" {
   description = "ACM certificate ARN"
   value       = module.acm.certificate_arn
 }
+
+output "codepipeline_name" {
+  description = "CodePipeline name — use this to monitor builds in the AWS Console"
+  value       = module.codepipeline.pipeline_name
+}
+
+output "github_connection_arn" {
+  description = "CodeStar GitHub connection ARN — activate once in AWS Console before first push"
+  value       = module.codepipeline.github_connection_arn
+}
+
+output "github_connection_status" {
+  description = "CodeStar GitHub connection status (PENDING until manually activated)"
+  value       = module.codepipeline.github_connection_status
+}

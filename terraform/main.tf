@@ -9,7 +9,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "socio-connect-terraform-state"
+    bucket         = "socio-connect-tfstate-985385108943"
     key            = "calendar-app/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
@@ -76,6 +76,7 @@ module "cloudfront" {
   s3_bucket_id                = module.s3.bucket_id
   s3_bucket_regional_domain   = module.s3.bucket_regional_domain_name
   s3_bucket_arn               = module.s3.bucket_arn
+  oac_id                      = module.s3.oac_id
   acm_certificate_arn         = module.acm.certificate_arn
   domain_names                = ["${var.subdomain}.${var.domain_name}"]
   price_class                 = var.cloudfront_price_class
@@ -94,6 +95,24 @@ module "route53" {
   domain_name             = var.domain_name
   cloudfront_domain_name  = module.cloudfront.distribution_domain_name
   cloudfront_hosted_zone  = module.cloudfront.distribution_hosted_zone_id
+}
+
+# ─── CI/CD Pipeline ───────────────────────────────────────────────────────────
+
+module "codepipeline" {
+  source = "./modules/codepipeline"
+
+  project_name               = var.project_name
+  environment                = var.environment
+  aws_region                 = var.aws_region
+  github_owner               = var.github_owner
+  github_repo                = var.github_repo
+  github_branch              = var.github_branch
+  s3_bucket_name             = module.s3.bucket_id
+  cloudfront_distribution_id = module.cloudfront.distribution_id
+  nx_app_name                = var.nx_app_name
+
+  depends_on = [module.s3, module.cloudfront]
 }
 
 # ─── Data Sources ─────────────────────────────────────────────────────────────

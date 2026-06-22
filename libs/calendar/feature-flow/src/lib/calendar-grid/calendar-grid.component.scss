@@ -42,7 +42,7 @@
   &__body {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, 120px);
+    grid-template-rows: repeat(6, 6vw);
     gap: 2px;
     flex: 1;
     padding: 2px var(--sc-spacing-md) var(--sc-spacing-md);

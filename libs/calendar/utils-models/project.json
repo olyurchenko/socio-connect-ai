@@ -1,0 +1,23 @@
+{
+  "name": "calendar-utils-models",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/calendar/utils-models/src",
+  "prefix": "sc",
+  "tags": ["scope:calendar", "type:utils"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["libs/calendar/utils-models/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/calendar/utils-models/jest.config.ts"
+      }
+    }
+  }
+}

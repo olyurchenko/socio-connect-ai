@@ -1,0 +1,41 @@
+<div class="app-shell">
+  <sc-ui-sidenav
+    class="app-nav"
+    [mode]="'side'"
+    [opened]="true"
+    [hasBackdrop]="false"
+    position="start"
+  >
+    <ng-container sidenavContent>
+      <div class="nav-header">
+        <div class="nav-logo">
+          <span class="nav-logo__icon material-icons-round">hub</span>
+          <span class="nav-logo__text">Socio Connect</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu" role="navigation" aria-label="Main navigation">
+        @for (item of navItems; track item.route) {
+          <a
+            class="nav-item"
+            [routerLink]="item.route"
+            routerLinkActive="nav-item--active"
+            [routerLinkActiveOptions]="{ exact: false }"
+            [attr.aria-label]="item.label"
+          >
+            <span class="material-icons-round nav-item__icon">{{ item.icon }}</span>
+            <span class="nav-item__label">{{ item.label }}</span>
+          </a>
+        }
+
+        <sc-filter-panel />
+      </nav>
+    </ng-container>
+
+    <ng-container mainContent>
+      <main class="app-main" role="main">
+        <router-outlet />
+      </main>
+    </ng-container>
+  </sc-ui-sidenav>
+</div>

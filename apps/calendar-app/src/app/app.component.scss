@@ -1,0 +1,74 @@
+.app-shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.nav-header {
+  padding: 20px var(--sc-spacing-md);
+  border-bottom: 1px solid var(--sc-color-outline);
+  margin-bottom: var(--sc-spacing-sm);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-spacing-sm);
+  text-decoration: none;
+
+  &__icon {
+    font-size: 28px;
+    color: var(--sc-color-primary);
+  }
+
+  &__text {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--sc-color-on-surface);
+    letter-spacing: -0.3px;
+  }
+}
+
+.nav-menu {
+  padding: var(--sc-spacing-sm) var(--sc-spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-spacing-sm);
+  padding: 10px var(--sc-spacing-md);
+  border-radius: 10px;
+  text-decoration: none;
+  color: #555;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &__icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  &:hover {
+    background-color: rgba(57, 73, 171, 0.07);
+    color: var(--sc-color-primary);
+  }
+
+  &--active {
+    background-color: rgba(57, 73, 171, 0.12);
+    color: var(--sc-color-primary);
+    font-weight: 600;
+  }
+}
+
+.app-main {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}

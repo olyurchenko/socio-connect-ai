@@ -1,0 +1,83 @@
+<div class="calendar-grid">
+  <!-- ── Month Header ──────────────────────────────────────────────────────── -->
+  <div class="calendar-grid__month-label">
+    {{ currentMonthLabel() }}
+  </div>
+
+  <!-- ── Day of Week Headers ──────────────────────────────────────────────── -->
+  <div class="calendar-grid__weekdays" role="row">
+    @for (day of daysOfWeek; track day) {
+      <div class="calendar-grid__weekday" role="columnheader" [attr.aria-label]="day">
+        {{ day }}
+      </div>
+    }
+  </div>
+
+  <!-- ── Loading Overlay ──────────────────────────────────────────────────── -->
+  @if (isLoading()) {
+    <div class="calendar-grid__loading-overlay">
+      <sc-ui-spinner [overlay]="true" message="Loading events…" />
+    </div>
+  }
+
+  <!-- ── Calendar Body ────────────────────────────────────────────────────── -->
+  <div class="calendar-grid__body sc-scrollbar" role="grid">
+    @for (day of calendarDays(); track day.date) {
+      <div
+        class="day-cell"
+        [class.day-cell--current-month]="day.isCurrentMonth"
+        [class.day-cell--today]="day.isToday"
+        [class.day-cell--past]="day.isPast && day.isCurrentMonth"
+        [class.day-cell--other-month]="!day.isCurrentMonth"
+        [class.day-cell--selected]="selectedDay() === day.date"
+        role="gridcell"
+        [attr.aria-label]="day.date"
+        [attr.aria-selected]="selectedDay() === day.date"
+        tabindex="0"
+        (click)="onDayClick(day)"
+        (keydown.enter)="onDayClick(day)"
+        (keydown.space)="onDayClick(day)"
+      >
+        <!-- Day Number -->
+        <div class="day-cell__number" [class.day-cell__number--today]="day.isToday">
+          {{ formatDayNumber(day.date) }}
+        </div>
+
+        <!-- Events Container -->
+        <div class="day-cell__events">
+          @for (event of visibleEvents(day); track event.id; let i = $index) {
+            <div
+              class="event-block"
+              [class]="getEventTypeClass(event.type) + ' ' + getEventStatusClass(event.status)"
+              [class.event-block--blurred]="isBlurred(i, day)"
+              [matTooltip]="event.title"
+              [matTooltipDisabled]="false"
+            >
+              <span class="event-block__title sc-truncate">{{ event.title }}</span>
+
+              <div class="event-block__meta">
+                @if (event.locationCount > 0) {
+                  <span
+                    class="event-block__location-count"
+                    [matTooltip]="event.locationCount + ' locations'"
+                  >
+                    <span class="material-icons-round" style="font-size: 10px">location_on</span>
+                    {{ event.locationCount }}
+                  </span>
+                }
+
+                @if (event.label) {
+                  <span
+                    class="event-block__label-dot"
+                    [style.background-color]="event.label.color"
+                    [matTooltip]="event.label.name"
+                  ></span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

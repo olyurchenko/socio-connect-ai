@@ -1,0 +1,64 @@
+<div class="calendar-flow">
+  <!-- ── Material Stepper ────────────────────────────────────────────────────── -->
+  <mat-stepper orientation="horizontal" [linear]="false">
+    <!-- ── Step 1: Calendar ─────────────────────────────────────────────────── -->
+    <mat-step label="Calendar" state="calendar">
+      <ng-template matStepLabel>
+        <span class="step-label">
+          <span class="material-icons-round step-label__icon">calendar_month</span>
+          Calendar
+        </span>
+      </ng-template>
+
+      <div class="step1-content">
+        <!-- Calendar grid with day-details sidenav -->
+        <sc-ui-sidenav
+          #daySidenav
+          class="calendar-sidenav"
+          mode="side"
+          position="end"
+          [opened]="daySidenavOpen()"
+          [hasBackdrop]="false"
+          [style.--sc-sidenav-width]="'var(--sc-day-sidenav-width)'"
+          (openedChange)="!$event && daySidenav.close()"
+        >
+          <ng-container sidenavContent>
+            <sc-day-sidenav />
+          </ng-container>
+
+          <ng-container mainContent>
+            <sc-calendar-grid />
+          </ng-container>
+        </sc-ui-sidenav>
+      </div>
+    </mat-step>
+
+    <!-- ── Step 2: Location Matching (placeholder) ──────────────────────────── -->
+    <mat-step label="Location Matching" state="location">
+      <ng-template matStepLabel>
+        <span class="step-label">
+          <span class="material-icons-round step-label__icon">location_on</span>
+          Location Matching
+        </span>
+      </ng-template>
+      <div class="step-placeholder">
+        <span class="material-icons-round" style="font-size:64px;color:#e0e0e0">construction</span>
+        <p>Step 2 – Location Matching coming soon</p>
+      </div>
+    </mat-step>
+
+    <!-- ── Step 3: Review (placeholder) ────────────────────────────────────── -->
+    <mat-step label="Review" state="review">
+      <ng-template matStepLabel>
+        <span class="step-label">
+          <span class="material-icons-round step-label__icon">rate_review</span>
+          Review
+        </span>
+      </ng-template>
+      <div class="step-placeholder">
+        <span class="material-icons-round" style="font-size:64px;color:#e0e0e0">construction</span>
+        <p>Step 3 – Review coming soon</p>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</div>

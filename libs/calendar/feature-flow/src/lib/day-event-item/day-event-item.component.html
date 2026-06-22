@@ -1,0 +1,130 @@
+<div
+  class="event-card"
+  [class.event-card--dismissed]="event().status === EventStatus.DISMISSED"
+  [class.event-card--used]="event().status === EventStatus.USED"
+  [class.event-card--location]="event().type === 'LOCATION'"
+  [class.event-card--calendar]="event().type === 'CALENDAR'"
+  [class.event-card--weather]="event().type === 'WEATHER'"
+>
+  <!-- Tags row -->
+  <div class="event-card__tags">
+    <span class="event-tag" [class]="getEventTypeClass(event().type)">
+      <span class="material-icons-round event-tag__icon">{{ getEventTypeIcon(event().type) }}</span>
+      {{ getEventTypeLabel(event().type) }}
+    </span>
+
+    @if (event().label) {
+      <span
+        class="event-label-tag"
+        [style.background-color]="event().label!.color + '18'"
+        [style.color]="event().label!.color"
+        [style.border-color]="event().label!.color + '40'"
+      >
+        {{ event().label!.name }}
+      </span>
+    }
+
+    @if (event().status === EventStatus.USED) {
+      <span class="status-badge status-badge--used">Already used</span>
+    }
+    @if (event().status === EventStatus.DISMISSED) {
+      <span class="status-badge status-badge--dismissed">Dismissed</span>
+    }
+  </div>
+
+  <!-- Title -->
+  <h3 class="event-card__title">{{ event().title }}</h3>
+
+  <!-- Details -->
+  <div class="event-card__details">
+    @if (formatLocation(event()); as loc) {
+      <div class="event-card__location-row">
+        <span class="material-icons-round event-card__location-icon">location_on</span>
+        <span class="event-card__location-text">{{ loc }}</span>
+      </div>
+    }
+
+    @if (event().locationCount > 0) {
+      <div class="event-card__detail-row">
+        <span class="event-card__dot"></span>
+        <span>{{ event().locationCount }} location{{ event().locationCount !== 1 ? 's' : '' }}</span>
+      </div>
+    }
+
+    @if (formatDuration(event()); as dur) {
+      <div class="event-card__detail-row">
+        <span class="material-icons-round event-card__detail-icon">schedule</span>
+        <span>{{ dur }}</span>
+      </div>
+    }
+
+    @if (event().dismissalReason) {
+      <div class="event-card__dismissal">
+        <span class="material-icons-round" style="font-size:13px;flex-shrink:0">info</span>
+        {{ event().dismissalReason }}
+      </div>
+    }
+  </div>
+
+  <!-- Actions -->
+  @if (!isPastDay()) {
+    @if (event().status === EventStatus.ACTIVE) {
+      @if (!isDismissing()) {
+        <div class="event-card__actions">
+          <button class="event-card__dismiss-btn" type="button" (click)="startDismiss()">
+            <span class="material-icons-round">close</span>
+            Dismiss
+          </button>
+          <sc-ui-button
+            variant="flat"
+            color="primary"
+            [loading]="isActionPending()"
+            (clicked)="onUse.emit()"
+          >
+            Use Event &nbsp;→
+          </sc-ui-button>
+        </div>
+      } @else {
+        <div class="dismiss-form">
+          <textarea
+            class="dismiss-form__input"
+            placeholder="Reason for dismissal (optional)"
+            [(ngModel)]="dismissReason"
+            maxlength="2000"
+            rows="3"
+            aria-label="Dismissal reason"
+          ></textarea>
+          <div class="dismiss-form__char-count">{{ dismissReason().length }}/2000</div>
+          <div class="dismiss-form__actions">
+            <sc-ui-button
+              variant="flat"
+              color="warn"
+              [loading]="isActionPending()"
+              (clicked)="confirmDismiss()"
+            >
+              Confirm Dismiss
+            </sc-ui-button>
+            <sc-ui-button variant="basic" [color]="undefined" (clicked)="cancelDismiss()">
+              Cancel
+            </sc-ui-button>
+          </div>
+        </div>
+      }
+    }
+
+    @if (event().status === EventStatus.DISMISSED && showDismissed()) {
+      <div class="event-card__actions">
+        <span></span>
+        <sc-ui-button
+          variant="stroked"
+          color="primary"
+          [loading]="isActionPending()"
+          (clicked)="onRestore.emit()"
+        >
+          <span class="material-icons-round" style="font-size:16px;margin-right:4px">restore</span>
+          Restore
+        </sc-ui-button>
+      </div>
+    }
+  }
+</div>

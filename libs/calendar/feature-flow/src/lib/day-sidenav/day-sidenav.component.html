@@ -1,0 +1,25 @@
+<div class="day-sidenav" [class.day-sidenav--past]="isPastDay()">
+  <!-- ── Header ──────────────────────────────────────────────────────────────── -->
+  <div class="day-sidenav__header">
+    <div class="day-sidenav__header-text">
+      <h2 class="day-sidenav__date">{{ formattedDate() }}</h2>
+      <span class="day-sidenav__count">{{ eventCountLabel() }}</span>
+      @if (isPastDay()) {
+        <span class="day-sidenav__past-badge">Read-only — past day</span>
+      }
+    </div>
+    <button
+      class="day-sidenav__close-btn"
+      type="button"
+      aria-label="Close day details"
+      (click)="close()"
+    >
+      <span class="material-icons-round">close</span>
+    </button>
+  </div>
+
+  <mat-divider />
+
+  <!-- ── Event List ─────────────────────────────────────────────────────────── -->
+  <sc-day-event-list />
+</div>

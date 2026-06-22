@@ -1,0 +1,9 @@
+# Copy this file to terraform.tfvars and fill in your values
+# Never commit terraform.tfvars to source control
+
+aws_region             = "us-east-1"
+project_name           = "socio-connect"
+environment            = "production"
+domain_name            = "example.com"
+subdomain              = "calendar"
+cloudfront_price_class = "PriceClass_100"

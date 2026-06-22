@@ -1,0 +1,90 @@
+<div class="filter-panel">
+  <!-- Total count -->
+  <div class="filter-panel__summary">
+    <span class="filter-panel__total-count">{{ totalEventsCount() }}</span>
+    <span class="filter-panel__total-label">events</span>
+  </div>
+
+  <div class="filter-panel__sep"></div>
+
+  <!-- Month picker -->
+  <sc-ui-select
+    class="filter-panel__select"
+    label="Month"
+    [options]="monthOptions"
+    [value]="selectedMonth()"
+    (selectionChanged)="onMonthChange($event)"
+    appearance="outline"
+  />
+
+  @if (countrySelectOptions.length) {
+    <!-- Country picker -->
+    <sc-ui-select
+      class="filter-panel__select"
+      placeholder="All countries"
+      [options]="countrySelectOptions"
+      [value]="activeCountryCode()"
+      (selectionChanged)="onCountryChange($event)"
+      appearance="outline"
+    />
+  }
+
+  <div class="filter-panel__sep"></div>
+
+  <!-- Event Type chips -->
+  <div class="filter-panel__type-chips">
+    @for (opt of eventTypeOptions; track opt.value) {
+      <button
+        class="type-chip"
+        [class.type-chip--active]="isEventTypeActive(opt.value)"
+        [style.--chip-color]="'var(' + opt.colorVar + ')'"
+        [style.--chip-bg]="'var(' + opt.bgVar + ')'"
+        (click)="onEventTypeToggle(opt.value)"
+        [attr.aria-pressed]="isEventTypeActive(opt.value)"
+        type="button"
+      >
+        <span class="material-icons-round type-chip__icon">{{ opt.icon }}</span>
+        <span class="type-chip__label">{{ opt.label }}</span>
+        <span class="type-chip__count">{{ eventTypeCounts()[opt.value] }}</span>
+      </button>
+    }
+  </div>
+
+  @if (labelChipItems.length) {
+    <div class="filter-panel__sep"></div>
+
+    <!-- Label chips -->
+    <sc-ui-chips
+      [chips]="labelChipItems"
+      [selectedValues]="activeLabelIds()"
+      (chipSelected)="onLabelChipSelected($event)"
+    />
+  }
+
+  <div class="filter-panel__sep"></div>
+
+  <!-- Dismissed toggle -->
+  <sc-ui-slide-toggle
+    label="Show dismissed"
+    [checked]="showDismissed()"
+    (toggled)="onDismissedToggle($event)"
+  />
+
+  <!-- Clear filters -->
+  @if (
+    activeEventTypes().length ||
+    activeLabelIds().length ||
+    activeCountryCode() ||
+    showDismissed()
+  ) {
+    <sc-ui-button
+      variant="basic"
+      [color]="undefined"
+      class="filter-panel__reset"
+      (clicked)="onResetFilters()"
+    >
+      <span class="material-icons-round" style="font-size:16px;margin-right:4px">close</span>
+      Clear
+    </sc-ui-button>
+  }
+</div>

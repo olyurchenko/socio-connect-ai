@@ -1,0 +1,38 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "bundler",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "lib": ["ES2022", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@socio-connect/calendar/utils-models": [
+        "libs/calendar/utils-models/src/index.ts"
+      ],
+      "@socio-connect/calendar/data-access": [
+        "libs/calendar/data-access/src/index.ts"
+      ],
+      "@socio-connect/calendar/feature-flow": [
+        "libs/calendar/feature-flow/src/index.ts"
+      ],
+      "@socio-connect/shared/ui-material-wrappers": [
+        "libs/shared/ui-material-wrappers/src/index.ts"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

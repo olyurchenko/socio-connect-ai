@@ -43,6 +43,7 @@ export interface ChipItem {
       :host {
         display: block;
       }
+      
       mat-chip {
         cursor: pointer;
         border: 1px solid transparent;
@@ -50,6 +51,9 @@ export interface ChipItem {
 
         &.mdc-evolution-chip--highlighted {
           border-color: currentColor;
+        }
+        &.mat-mdc-standard-chip {
+          background-color: transparent;
         }
       }
     `,

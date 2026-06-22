@@ -10,8 +10,6 @@ import { CommonModule } from '@angular/common';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
-  CalendarDayActions,
-  CalendarEventActions,
   CalendarFilterActions,
   CalendarReferenceActions,
   selectActiveCountryCode,
@@ -122,8 +120,9 @@ export class FilterPanelComponent implements OnInit {
   }
 
   onMonthChange(month: string | string[] | null): void {
-    if (typeof month === 'string') {
-      this.store.dispatch(CalendarFilterActions.setMonth({ month }));
+    const value = typeof month === 'string' ? month : month === null ? getCurrentMonthValue() : null;
+    if (value) {
+      this.store.dispatch(CalendarFilterActions.setMonth({ month: value }));
     }
   }
 

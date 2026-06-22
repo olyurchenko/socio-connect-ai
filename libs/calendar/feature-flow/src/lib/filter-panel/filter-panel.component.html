@@ -24,6 +24,7 @@
       placeholder="All countries"
       [options]="countrySelectOptions"
       [value]="activeCountryCode()"
+      [clearable]="true"
       (selectionChanged)="onCountryChange($event)"
       appearance="outline"
     />

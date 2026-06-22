@@ -26,6 +26,7 @@ export interface ChipItem {
           [highlighted]="selectedValues().includes(chip.value)"
           [removable]="chip.removable ?? removable()"
           [style.--mdc-chip-label-text-color]="chip.color"
+          [style.--mat-mdc-chip-highlighted ]="chip.color"
           [style.border-color]="chip.color"
           (click)="onChipClick(chip.value)"
           (removed)="chipRemoved.emit(chip.value)"
@@ -43,12 +44,13 @@ export interface ChipItem {
       :host {
         display: block;
       }
-      
+      .mat-mdc-chip-highlighted {
+        background-color: color-mix(in srgb, var(--mdc-chip-label-text-color, currentColor) 40%, transparent) !important;      
+      }
       mat-chip {
         cursor: pointer;
         border: 1px solid transparent;
         transition: all 0.15s ease;
-
         &.mdc-evolution-chip--highlighted {
           border-color: currentColor;
         }

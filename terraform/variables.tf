@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "Primary AWS region for deployment"
   type        = string
-  default     = "us-east-1"
+  default     = "eu-west-1"
 }
 
 variable "project_name" {
@@ -45,7 +45,7 @@ variable "github_repo" {
 variable "github_branch" {
   description = "GitHub branch to watch — pipeline triggers on every push to this branch"
   type        = string
-  default     = "master"
+  default     = "main"
 }
 
 variable "nx_app_name" {

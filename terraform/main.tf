@@ -85,6 +85,36 @@ module "cloudfront" {
   depends_on = [module.acm]
 }
 
+# ─── S3 Bucket Policy (needs CloudFront ARN — defined here to avoid circular dep) ──
+
+data "aws_iam_policy_document" "s3_cloudfront" {
+  statement {
+    sid    = "AllowCloudFrontServicePrincipal"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    actions   = ["s3:GetObject"]
+    resources = ["${module.s3.bucket_arn}/*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [module.cloudfront.distribution_arn]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "frontend" {
+  bucket = module.s3.bucket_id
+  policy = data.aws_iam_policy_document.s3_cloudfront.json
+
+  depends_on = [module.s3, module.cloudfront]
+}
+
 # ─── Route 53 DNS Records ────────────────────────────────────────────────────
 
 module "route53" {

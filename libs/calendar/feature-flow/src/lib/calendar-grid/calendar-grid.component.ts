@@ -171,4 +171,8 @@ export class CalendarGridComponent {
   formatDayNumber(date: string): number {
     return parseInt(date.split('-')[2], 10);
   }
+
+  isOverlayVisible(day: CalendarDay): boolean {
+    return  day.events.length > 3;
+  }
 }

@@ -237,7 +237,7 @@ export class CalendarApiService {
       [EventType.WEATHER]: events.filter((e) => e.type === EventType.WEATHER).length,
     };
 
-    return of({ events, typeCounts }).pipe(delay(400));
+    return of({ events: events.map((e) => ({ ...e })), typeCounts }).pipe(delay(400));
   }
 
   getDayEvents(
@@ -256,7 +256,7 @@ export class CalendarApiService {
     const items = events.slice(start, start + pageSize);
 
     return of({
-      items,
+      items: items.map((e) => ({ ...e })),
       total: events.length,
       page,
       pageSize,
@@ -273,25 +273,23 @@ export class CalendarApiService {
   }
 
   useEvent(eventId: string): Observable<EventActionResponse> {
-    const event = MOCK_EVENTS.find((e) => e.id === eventId);
-    if (!event) throw new Error(`Mock: event ${eventId} not found`);
-    event.status = EventStatus.USED;
-    return of({ event: { ...event }, message: 'Event marked as used' }).pipe(delay(300));
+    const index = MOCK_EVENTS.findIndex((e) => e.id === eventId);
+    if (index === -1) throw new Error(`Mock: event ${eventId} not found`);
+    MOCK_EVENTS[index] = { ...MOCK_EVENTS[index], status: EventStatus.USED };
+    return of({ event: { ...MOCK_EVENTS[index] }, message: 'Event marked as used' }).pipe(delay(300));
   }
 
   dismissEvent(eventId: string, reason?: string): Observable<EventActionResponse> {
-    const event = MOCK_EVENTS.find((e) => e.id === eventId);
-    if (!event) throw new Error(`Mock: event ${eventId} not found`);
-    event.status = EventStatus.DISMISSED;
-    event.dismissalReason = reason;
-    return of({ event: { ...event }, message: 'Event dismissed' }).pipe(delay(300));
+    const index = MOCK_EVENTS.findIndex((e) => e.id === eventId);
+    if (index === -1) throw new Error(`Mock: event ${eventId} not found`);
+    MOCK_EVENTS[index] = { ...MOCK_EVENTS[index], status: EventStatus.DISMISSED, dismissalReason: reason };
+    return of({ event: { ...MOCK_EVENTS[index] }, message: 'Event dismissed' }).pipe(delay(300));
   }
 
   restoreEvent(eventId: string): Observable<EventActionResponse> {
-    const event = MOCK_EVENTS.find((e) => e.id === eventId);
-    if (!event) throw new Error(`Mock: event ${eventId} not found`);
-    event.status = EventStatus.ACTIVE;
-    event.dismissalReason = undefined;
-    return of({ event: { ...event }, message: 'Event restored' }).pipe(delay(300));
+    const index = MOCK_EVENTS.findIndex((e) => e.id === eventId);
+    if (index === -1) throw new Error(`Mock: event ${eventId} not found`);
+    MOCK_EVENTS[index] = { ...MOCK_EVENTS[index], status: EventStatus.ACTIVE, dismissalReason: undefined };
+    return of({ event: { ...MOCK_EVENTS[index] }, message: 'Event restored' }).pipe(delay(300));
   }
 }

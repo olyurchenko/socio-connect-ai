@@ -7,12 +7,11 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CalendarEvent, EventStatus, EventType } from '@socio-connect/calendar/utils-models';
-import { UiButtonComponent } from '@socio-connect/shared/ui-material-wrappers';
 
 @Component({
   selector: 'sc-day-event-item',
   standalone: true,
-  imports: [FormsModule, UiButtonComponent],
+  imports: [FormsModule],
   templateUrl: './day-event-item.component.html',
   styleUrl: './day-event-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

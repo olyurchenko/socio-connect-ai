@@ -251,4 +251,15 @@ export class CalendarEffects {
       ),
     ),
   );
+
+  reloadDayEventsAfterAction$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        CalendarEventActions.dismissEventSuccess,
+        CalendarEventActions.restoreEventSuccess,
+      ),
+      withLatestFrom(this.store.select(selectSelectedDay)),
+      map(([, date]) => CalendarDayActions.loadDayEvents({ date: date!, page: 1 })),
+    ),
+  );
 }

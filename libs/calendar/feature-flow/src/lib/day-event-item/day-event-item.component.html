@@ -75,14 +75,17 @@
             <span class="material-icons-round">close</span>
             Dismiss
           </button>
-          <sc-ui-button
-            variant="flat"
-            color="primary"
-            [loading]="isActionPending()"
-            (clicked)="onUse.emit()"
+          <button
+            class="event-card__action-btn event-card__action-btn--primary"
+            type="button"
+            [disabled]="isActionPending()"
+            (click)="onUse.emit()"
           >
-            Use Event &nbsp;→
-          </sc-ui-button>
+            @if (isActionPending()) {
+              <span class="event-card__action-spinner"></span>
+            }
+            Use Event →
+          </button>
         </div>
       } @else {
         <div class="dismiss-form">
@@ -96,34 +99,40 @@
           ></textarea>
           <div class="dismiss-form__char-count">{{ dismissReason().length }}/2000</div>
           <div class="dismiss-form__actions">
-            <sc-ui-button
-              variant="flat"
-              color="warn"
-              [loading]="isActionPending()"
-              (clicked)="confirmDismiss()"
+            <button
+              class="event-card__action-btn event-card__action-btn--warn"
+              type="button"
+              [disabled]="isActionPending()"
+              (click)="confirmDismiss()"
             >
+              @if (isActionPending()) {
+                <span class="event-card__action-spinner event-card__action-spinner--warn"></span>
+              }
               Confirm Dismiss
-            </sc-ui-button>
-            <sc-ui-button variant="basic" [color]="undefined" (clicked)="cancelDismiss()">
+            </button>
+            <button class="event-card__action-btn" type="button" (click)="cancelDismiss()">
               Cancel
-            </sc-ui-button>
+            </button>
           </div>
         </div>
       }
     }
 
-    @if (event().status === EventStatus.DISMISSED && showDismissed()) {
+    @if (event().status === EventStatus.DISMISSED) {
       <div class="event-card__actions">
         <span></span>
-        <sc-ui-button
-          variant="stroked"
-          color="primary"
-          [loading]="isActionPending()"
-          (clicked)="onRestore.emit()"
+        <button
+          class="event-card__action-btn event-card__action-btn--primary"
+          type="button"
+          [disabled]="isActionPending()"
+          (click)="onRestore.emit()"
         >
-          <span class="material-icons-round" style="font-size:16px;margin-right:4px">restore</span>
+          @if (isActionPending()) {
+            <span class="event-card__action-spinner"></span>
+          }
+          <span class="material-icons-round" style="font-size:16px">restore</span>
           Restore
-        </sc-ui-button>
+        </button>
       </div>
     }
   }

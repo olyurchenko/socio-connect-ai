@@ -37,7 +37,11 @@
         (click)="onDayClick(day)"
         (keydown.enter)="onDayClick(day)"
         (keydown.space)="onDayClick(day)"
-      >
+      > 
+        <!-- Overlay -->
+        <div class="day-cell__overlay" *ngIf="isOverlayVisible(day)">
+        </div>
+       
         <!-- Day Number -->
         <div class="day-cell__number" [class.day-cell__number--today]="day.isToday">
           {{ formatDayNumber(day.date) }}

@@ -1,5 +1,7 @@
-@if (event()) {
+@if (event(); as event) {
   <div class="lm-step">
+    <sc-location-matching-header [event]="event" [radiusMeters]="radiusMeters()" />
+
     <div class="lm-step__body">
       @if (isInitialLoading()) {
         <div class="lm-step__loader">

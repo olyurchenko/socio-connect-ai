@@ -8,22 +8,19 @@ import {
   selectActiveCategoryIds,
   selectActiveRegionIds,
   selectCategories,
-  selectLocationMatchingEvent,
   selectLocationsLoading,
-  selectRadiusMeters,
   selectRegions,
   selectSelectedLocationsCount,
   selectVisibleLocations,
 } from '@socio-connect/calendar/data-access';
 import { UiSpinnerComponent } from '@socio-connect/shared/ui-material-wrappers';
 import { DeselectAllDialogComponent } from '../deselect-all-dialog/deselect-all-dialog.component';
-import { LocationMatchingHeaderComponent } from '../location-matching-header/location-matching-header.component';
 import { LocationRowComponent } from '../location-row/location-row.component';
 
 @Component({
   selector: 'sc-location-sidebar',
   standalone: true,
-  imports: [CommonModule, UiSpinnerComponent, LocationMatchingHeaderComponent, LocationRowComponent],
+  imports: [CommonModule, UiSpinnerComponent, LocationRowComponent],
   templateUrl: './location-sidebar.component.html',
   styleUrl: './location-sidebar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,8 +29,6 @@ export class LocationSidebarComponent {
   private readonly store = inject(Store);
   private readonly dialog = inject(MatDialog);
 
-  protected readonly event = this.store.selectSignal(selectLocationMatchingEvent);
-  protected readonly radiusMeters = this.store.selectSignal(selectRadiusMeters);
   protected readonly regions = this.store.selectSignal(selectRegions);
   protected readonly categories = this.store.selectSignal(selectCategories);
   protected readonly activeRegionIds = this.store.selectSignal(selectActiveRegionIds);

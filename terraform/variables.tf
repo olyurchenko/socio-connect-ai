@@ -33,7 +33,7 @@ variable "subdomain" {
 variable "github_owner" {
   description = "GitHub repository owner (username or org)"
   type        = string
-  default     = "olyurchenko"
+  default     = "SocioLocal"
 }
 
 variable "github_repo" {

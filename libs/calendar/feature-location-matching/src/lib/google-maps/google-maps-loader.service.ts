@@ -21,7 +21,7 @@ export class GoogleMapsLoaderService {
       }
 
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&libraries=places&language=en-US`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&libraries=places&language=en-US&loading=async`;
       script.async = true;
       script.onload = () => resolve();
       script.onerror = () => reject(new Error('Failed to load Google Maps JavaScript API'));

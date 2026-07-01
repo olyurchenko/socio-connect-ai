@@ -1,12 +1,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  OnDestroy,
+  afterNextRender,
   input,
   model,
   output,
   viewChild,
 } from '@angular/core';
-import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
+import { MatSidenavModule, MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
 
 export type SidenavMode = 'over' | 'push' | 'side';
 export type SidenavPosition = 'start' | 'end';
@@ -16,7 +19,7 @@ export type SidenavPosition = 'start' | 'end';
   standalone: true,
   imports: [MatSidenavModule],
   template: `
-    <mat-sidenav-container class="sidenav-container" [hasBackdrop]="hasBackdrop()">
+    <mat-sidenav-container #container class="sidenav-container" [hasBackdrop]="hasBackdrop()">
       <mat-sidenav
         #sidenav
         [mode]="mode()"
@@ -56,7 +59,7 @@ export type SidenavPosition = 'start' | 'end';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UiSidenavComponent {
+export class UiSidenavComponent implements OnDestroy {
   readonly mode = input<SidenavMode>('over');
   readonly opened = model(false);
   readonly position = input<SidenavPosition>('start');
@@ -67,6 +70,27 @@ export class UiSidenavComponent {
   readonly closedStart = output<void>();
 
   readonly sidenav = viewChild<MatSidenav>('sidenav');
+  private readonly container = viewChild<MatSidenavContainer>('container');
+  private readonly sidenavElement = viewChild('sidenav', { read: ElementRef });
+
+  private resizeObserver?: ResizeObserver;
+
+  constructor() {
+    // MatSidenavContainer only recalculates the content margin when the
+    // drawer opens/closes or the viewport resizes. Its width can also
+    // change (e.g. via the --sc-sidenav-width CSS var) while it stays
+    // opened, which the container never picks up on its own.
+    afterNextRender(() => {
+      const element = this.sidenavElement()?.nativeElement;
+      if (!element) return;
+      this.resizeObserver = new ResizeObserver(() => this.container()?.updateContentMargins());
+      this.resizeObserver.observe(element);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
+  }
 
   open(): void {
     this.sidenav()?.open();

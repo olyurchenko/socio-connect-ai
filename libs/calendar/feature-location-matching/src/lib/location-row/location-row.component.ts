@@ -69,7 +69,7 @@ export class LocationRowComponent {
   }
 
   skipReason(): void {
-    console.log('skip reason');
+    console.log('skip reason test');
     this.isReasonPopoverOpen.set(false);
     this.selectionChange.emit({ selected: false });
   }

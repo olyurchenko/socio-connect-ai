@@ -1,0 +1,87 @@
+<div class="loc-row" [class.loc-row--unchecked]="!location().selected">
+  <button
+    #checkboxOrigin="cdkOverlayOrigin"
+    cdkOverlayOrigin
+    type="button"
+    class="loc-row__checkbox"
+    [class.loc-row__checkbox--checked]="location().selected"
+    [attr.aria-pressed]="location().selected"
+    (click)="onCheckboxClick()"
+  >
+    @if (location().selected) {
+      <span class="material-icons-round">check</span>
+    }
+  </button>
+
+  <span class="loc-row__name sc-truncate">{{ location().name }}</span>
+  <span class="loc-row__area sc-truncate">{{ location().area }}</span>
+
+  <span
+    class="loc-row__category-badge sc-truncate"
+    [style.background-color]="location().categoryColor + '18'"
+    [style.color]="location().categoryColor"
+  >
+    {{ location().categoryName }}
+  </span>
+
+  <span
+    #relevanceOrigin="cdkOverlayOrigin"
+    cdkOverlayOrigin
+    class="loc-row__relevance"
+    (mouseenter)="isTooltipOpen.set(true)"
+    (mouseleave)="isTooltipOpen.set(false)"
+  >
+    <span class="loc-row__relevance-bar">
+      <span
+        class="loc-row__relevance-bar-fill"
+        [style.width.%]="location().relevanceScore"
+        [style.background-color]="relevanceColor()"
+      ></span>
+    </span>
+    <span class="loc-row__relevance-pct" [style.color]="relevanceColor()">
+      {{ location().relevanceScore }}%
+    </span>
+  </span>
+
+  <span class="loc-row__last-post" [class.loc-row__last-post--stale]="isStale()">
+    {{ lastPostLabel() }}
+  </span>
+</div>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="checkboxOrigin"
+  [cdkConnectedOverlayOpen]="isReasonPopoverOpen()"
+  [cdkConnectedOverlayPositions]="overlayPositions"
+  (overlayOutsideClick)="skipReason()"
+>
+  <div class="reason-popover">
+    <div class="reason-popover__title">WHY REMOVE THIS LOCATION? <span>(optional)</span></div>
+    <textarea
+      class="reason-popover__input"
+      placeholder="Add a note..."
+      rows="3"
+      [(ngModel)]="reasonText"
+    ></textarea>
+    <div class="reason-popover__actions">
+      <button type="button" class="reason-popover__skip" (click)="skipReason()">Skip</button>
+      <button type="button" class="reason-popover__done" (click)="confirmReason()">Done</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="relevanceOrigin"
+  [cdkConnectedOverlayOpen]="isTooltipOpen()"
+  [cdkConnectedOverlayPositions]="overlayPositions"
+>
+  <div class="relevance-tooltip">
+    <div class="relevance-tooltip__title">Relevance: {{ location().relevanceScore }}%</div>
+    <div>📍 Distance: {{ distanceText() }}</div>
+    <div>
+      🏪 Category: {{ location().relevanceBreakdown.categoryPercent }}%
+      ({{ location().relevanceBreakdown.categoryLabel }})
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,35 @@
+@if (mapsReady()) {
+  <google-map height="100%" width="100%" [center]="center()" [zoom]="12" [options]="mapOptions">
+    @if (eventMarkerPosition(); as eventPos) {
+      <map-marker
+        #eventMarker="mapMarker"
+        [position]="eventPos"
+        [options]="eventMarkerOptions()"
+        (mapClick)="openEventInfo(eventMarker)"
+      />
+      <map-circle [center]="eventPos" [radius]="radiusMeters() ?? 0" [options]="circleOptions()" />
+    }
+
+    @for (location of locations(); track location.id) {
+      <map-marker
+        #marker="mapMarker"
+        [position]="{ lat: location.latitude, lng: location.longitude }"
+        [options]="markerOptions(location)"
+        (mapClick)="openLocationInfo(location, marker)"
+      />
+    }
+
+    <map-info-window>
+      @if (activeInfo(); as info) {
+        <div class="map-info">
+          <strong>{{ info.title }}</strong>
+          @if (info.body) {
+            <div>{{ info.body }}</div>
+          }
+        </div>
+      }
+    </map-info-window>
+  </google-map>
+} @else {
+  <div class="map-loading">Loading map…</div>
+}

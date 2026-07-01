@@ -8,6 +8,7 @@ import {
   CalendarDayActions,
   CalendarEventActions,
   CalendarFilterActions,
+  CalendarFlowActions,
   CalendarMonthActions,
   CalendarReferenceActions,
 } from './calendar.actions';
@@ -15,6 +16,8 @@ import {
 export const CALENDAR_FEATURE_KEY = 'calendar';
 
 export const initialCalendarState: CalendarState = {
+  currentStepIndex: 0,
+
   filters: {
     month: getCurrentMonthValue(),
     eventTypes: [],
@@ -219,28 +222,6 @@ export const calendarReducer = createReducer(
 
   // ─── Event Action Reducers ──────────────────────────────────────────────────
 
-  on(CalendarEventActions.useEvent, (state, { eventId }) => ({
-    ...state,
-    pendingEventActionId: eventId,
-    eventActionLoadingState: 'loading' as const,
-    eventActionError: null,
-  })),
-
-  on(CalendarEventActions.useEventSuccess, (state, { event }) => ({
-    ...state,
-    pendingEventActionId: null,
-    eventActionLoadingState: 'success' as const,
-    dayEvents: state.dayEvents.map((e) => (e.id === event.id ? event : e)),
-    monthEvents: state.monthEvents.map((e) => (e.id === event.id ? event : e)),
-  })),
-
-  on(CalendarEventActions.useEventFailure, (state, { error }) => ({
-    ...state,
-    pendingEventActionId: null,
-    eventActionLoadingState: 'error' as const,
-    eventActionError: error,
-  })),
-
   on(CalendarEventActions.dismissEvent, (state, { eventId }) => ({
     ...state,
     pendingEventActionId: eventId,
@@ -283,5 +264,12 @@ export const calendarReducer = createReducer(
     pendingEventActionId: null,
     eventActionLoadingState: 'error' as const,
     eventActionError: error,
+  })),
+
+  // ─── Flow Navigation Reducers ───────────────────────────────────────────────
+
+  on(CalendarFlowActions.goToStep, (state, { index }) => ({
+    ...state,
+    currentStepIndex: index,
   })),
 );

@@ -1,0 +1,78 @@
+<div class="lm-sidebar">
+  @if (event(); as event) {
+    <sc-location-matching-header [event]="event" [radiusMeters]="radiusMeters()" />
+  }
+
+  <div class="lm-sidebar__filters">
+    <div class="filter-group">
+      <span class="filter-group__label">City / Region</span>
+      <div class="filter-group__chips">
+        @for (region of regions(); track region.id) {
+          <button
+            type="button"
+            class="chip"
+            [class.chip--active]="activeRegionIds().includes(region.id)"
+            (click)="toggleRegion(region.id)"
+          >
+            {{ region.name }} · {{ region.locationCount }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-group__label">Store Category</span>
+      <div class="filter-group__chips">
+        @for (category of categories(); track category.id) {
+          <button
+            type="button"
+            class="chip"
+            [class.chip--active]="activeCategoryIds().includes(category.id)"
+            [style.--chip-color]="category.color"
+            (click)="toggleCategory(category.id)"
+          >
+            {{ category.name }} · {{ category.locationCount }}
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="lm-sidebar__controls">
+    <span class="lm-sidebar__count">Showing {{ locations().length }} locations</span>
+    <span class="lm-sidebar__spacer"></span>
+    <button type="button" class="lm-sidebar__link" (click)="selectAll()">Select all</button>
+    <button type="button" class="lm-sidebar__link" (click)="deselectAll()">Deselect all</button>
+  </div>
+
+  <div class="lm-sidebar__list sc-scrollbar">
+    @if (locationsLoading()) {
+      <div class="lm-sidebar__list-loader">
+        <sc-ui-spinner [diameter]="28" />
+      </div>
+    } @else {
+      @for (location of locations(); track location.id) {
+        <sc-location-row
+          [location]="location"
+          (selectionChange)="onRowSelectionChange(location.id, $event)"
+        />
+      }
+    }
+  </div>
+
+  <div class="lm-sidebar__footer">
+    <span class="lm-sidebar__selected-count">{{ selectedCount() }} locations selected</span>
+    <button
+      type="button"
+      class="lm-sidebar__generate-btn"
+      [disabled]="selectedCount() === 0"
+      (click)="generateCreativeBriefs()"
+    >
+      @if (selectedCount() === 0) {
+        Select locations to continue
+      } @else {
+        Generate Creative Briefs →
+      }
+    </button>
+  </div>
+</div>

@@ -79,7 +79,7 @@
             class="event-card__action-btn event-card__action-btn--primary"
             type="button"
             [disabled]="isActionPending()"
-            (click)="onUse.emit()"
+            (click)="use.emit()"
           >
             @if (isActionPending()) {
               <span class="event-card__action-spinner"></span>
@@ -125,7 +125,7 @@
           class="event-card__action-btn event-card__action-btn--primary"
           type="button"
           [disabled]="isActionPending()"
-          (click)="onRestore.emit()"
+          (click)="restore.emit()"
         >
           @if (isActionPending()) {
             <span class="event-card__action-spinner"></span>

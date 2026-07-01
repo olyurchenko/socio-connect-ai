@@ -21,7 +21,7 @@ export interface SelectOption<T = string> {
   standalone: true,
   imports: [FormsModule, MatButtonModule, MatFormFieldModule, MatSelectModule],
   template: `
-    <mat-form-field [appearance]="appearance()" [class]="fieldClass()" [class.has-clear]="clearable() && value() != null">
+    <mat-form-field [appearance]="appearance()" [class]="fieldClass()" [class.has-clear]="clearable() && value() !== null">
       @if (label()) {
         <mat-label>{{ label() }}</mat-label>
       }
@@ -38,7 +38,7 @@ export interface SelectOption<T = string> {
           </mat-option>
         }
       </mat-select>
-      @if (clearable() && value() != null) {
+      @if (clearable() && value() !== null) {
         <button
           matSuffix
           type="button"

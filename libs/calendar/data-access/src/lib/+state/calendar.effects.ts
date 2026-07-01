@@ -6,25 +6,31 @@ import {
   catchError,
   debounceTime,
   exhaustMap,
+  filter,
   map,
   of,
   switchMap,
   tap,
   withLatestFrom,
 } from 'rxjs';
+import { CalendarEvent } from '@socio-connect/calendar/utils-models';
 import { CalendarApiService } from '../services/calendar-api.service';
 import {
   CalendarDayActions,
   CalendarEventActions,
   CalendarFilterActions,
+  CalendarFlowActions,
   CalendarMonthActions,
   CalendarReferenceActions,
 } from './calendar.actions';
 import {
+  selectDayEvents,
   selectDayEventsCurrentPage,
   selectFilters,
+  selectMonthEvents,
   selectSelectedDay,
 } from './calendar.selectors';
+import { LocationMatchingActions } from './location-matching.actions';
 
 @Injectable()
 export class CalendarEffects {
@@ -201,18 +207,16 @@ export class CalendarEffects {
   useEvent$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CalendarEventActions.useEvent),
-      exhaustMap(({ eventId }) =>
-        this.api.useEvent(eventId).pipe(
-          map(({ event }) => CalendarEventActions.useEventSuccess({ event })),
-          catchError((err) =>
-            of(
-              CalendarEventActions.useEventFailure({
-                error: err?.message ?? 'Failed to use event',
-              }),
-            ),
-          ),
-        ),
+      withLatestFrom(this.store.select(selectDayEvents), this.store.select(selectMonthEvents)),
+      map(
+        ([{ eventId }, dayEvents, monthEvents]: [{ eventId: string }, CalendarEvent[], CalendarEvent[]]) =>
+          dayEvents.find((e) => e.id === eventId) ?? monthEvents.find((e) => e.id === eventId),
       ),
+      filter((event): event is CalendarEvent => event !== undefined),
+      switchMap((event) => [
+        LocationMatchingActions.enterFlow({ event }),
+        CalendarFlowActions.goToStep({ index: 1 }),
+      ]),
     ),
   );
 
@@ -259,6 +263,17 @@ export class CalendarEffects {
         CalendarEventActions.restoreEventSuccess,
       ),
       withLatestFrom(this.store.select(selectSelectedDay)),
+      map(([, date]) => CalendarDayActions.loadDayEvents({ date: date!, page: 1 })),
+    ),
+  );
+
+  // ─── Reload Day Events on "Show Dismissed" Toggle ────────────────────────
+
+  reloadDayEventsOnShowDismissedToggle$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CalendarFilterActions.toggleShowDismissed),
+      withLatestFrom(this.store.select(selectSelectedDay)),
+      filter(([, date]) => date !== null),
       map(([, date]) => CalendarDayActions.loadDayEvents({ date: date!, page: 1 })),
     ),
   );

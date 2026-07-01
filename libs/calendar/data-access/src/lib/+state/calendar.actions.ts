@@ -76,8 +76,6 @@ export const CalendarEventActions = createActionGroup({
   source: 'Calendar Event Actions',
   events: {
     'Use Event': props<{ eventId: string }>(),
-    'Use Event Success': props<{ event: CalendarEvent }>(),
-    'Use Event Failure': props<{ error: string }>(),
 
     'Dismiss Event': props<{ eventId: string; reason?: string }>(),
     'Dismiss Event Success': props<{ event: CalendarEvent }>(),
@@ -86,5 +84,14 @@ export const CalendarEventActions = createActionGroup({
     'Restore Event': props<{ eventId: string }>(),
     'Restore Event Success': props<{ event: CalendarEvent }>(),
     'Restore Event Failure': props<{ error: string }>(),
+  },
+});
+
+// ─── Flow Navigation Actions ──────────────────────────────────────────────────
+
+export const CalendarFlowActions = createActionGroup({
+  source: 'Calendar Flow',
+  events: {
+    'Go To Step': props<{ index: number }>(),
   },
 });

@@ -16,7 +16,7 @@ import {
   selectPendingEventActionId,
   selectSelectedDay,
 } from '@socio-connect/calendar/data-access';
-import { CalendarEvent } from '@socio-connect/calendar/utils-models';
+import { CalendarEvent, EventStatus } from '@socio-connect/calendar/utils-models';
 import { UiSpinnerComponent, UiButtonComponent } from '@socio-connect/shared/ui-material-wrappers';
 import { DayEventItemComponent } from '../day-event-item/day-event-item.component';
 
@@ -38,6 +38,12 @@ export class DayEventListComponent {
   protected readonly pendingActionId = this.store.selectSignal(selectPendingEventActionId);
   protected readonly actionLoading = this.store.selectSignal(selectEventActionLoading);
   protected readonly selectedDay = this.store.selectSignal(selectSelectedDay);
+
+  protected readonly visibleDayEvents = computed(() =>
+    this.filters().showDismissed
+      ? this.dayEvents()
+      : this.dayEvents().filter((e) => e.status !== EventStatus.DISMISSED),
+  );
 
   protected readonly isPastDay = computed(() => {
     const day = this.selectedDay();

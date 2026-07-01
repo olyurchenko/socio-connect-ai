@@ -1,0 +1,9 @@
+<div class="lm-header">
+  <span class="type-badge" [class]="typeClass()">{{ typeLabel() }}</span>
+  <h2 class="lm-header__title sc-truncate">{{ event().title }}</h2>
+  <span class="lm-header__meta sc-truncate">{{ metaText() }}</span>
+  <span class="lm-header__spacer"></span>
+  <button class="lm-header__change-trigger" type="button" (click)="changeTrigger()">
+    Change trigger
+  </button>
+</div>

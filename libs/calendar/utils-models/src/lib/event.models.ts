@@ -48,6 +48,9 @@ export interface CalendarEvent {
   location?: EventLocation;
   dismissalReason?: string;
   isRecurring?: boolean;
+  subtype?: string;
+  providerRank?: number;
+  eligibleLocationsCount?: number;
   createdAt: string;
   updatedAt: string;
 }

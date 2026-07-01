@@ -1,0 +1,14 @@
+<div class="deselect-all-dialog">
+  <h2 class="deselect-all-dialog__title">Deselect all visible locations?</h2>
+  <p class="deselect-all-dialog__subtitle">Why remove these locations? (optional)</p>
+  <textarea
+    class="deselect-all-dialog__input"
+    placeholder="Add a note..."
+    rows="4"
+    [(ngModel)]="reasonText"
+  ></textarea>
+  <div class="deselect-all-dialog__actions">
+    <button type="button" class="deselect-all-dialog__cancel" (click)="cancel()">Cancel</button>
+    <button type="button" class="deselect-all-dialog__confirm" (click)="confirm()">Deselect</button>
+  </div>
+</div>

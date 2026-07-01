@@ -1,6 +1,11 @@
 <div class="calendar-flow">
   <!-- ── Material Stepper ────────────────────────────────────────────────────── -->
-  <mat-stepper orientation="horizontal" [linear]="false">
+  <mat-stepper
+    orientation="horizontal"
+    [linear]="false"
+    [selectedIndex]="currentStepIndex()"
+    (selectionChange)="onStepChanged($event.selectedIndex)"
+  >
     <!-- ── Step 1: Calendar ─────────────────────────────────────────────────── -->
     <mat-step label="Calendar" state="calendar">
       <ng-template matStepLabel>
@@ -33,7 +38,7 @@
       </div>
     </mat-step>
 
-    <!-- ── Step 2: Location Matching (placeholder) ──────────────────────────── -->
+    <!-- ── Step 2: Location Matching ─────────────────────────────────────────── -->
     <mat-step label="Location Matching" state="location">
       <ng-template matStepLabel>
         <span class="step-label">
@@ -41,9 +46,8 @@
           Location Matching
         </span>
       </ng-template>
-      <div class="step-placeholder">
-        <span class="material-icons-round" style="font-size:64px;color:#e0e0e0">construction</span>
-        <p>Step 2 – Location Matching coming soon</p>
+      <div class="step2-content">
+        <sc-location-matching-step />
       </div>
     </mat-step>
 

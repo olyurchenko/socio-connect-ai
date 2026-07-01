@@ -10,7 +10,10 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "lib": ["ES2022", "dom"],
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
@@ -29,10 +32,19 @@
       "@socio-connect/calendar/feature-flow": [
         "libs/calendar/feature-flow/src/index.ts"
       ],
+      "@socio-connect/calendar/feature-filter": [
+        "libs/calendar/feature-filter/src/index.ts"
+      ],
       "@socio-connect/shared/ui-material-wrappers": [
         "libs/shared/ui-material-wrappers/src/index.ts"
+      ],
+      "@socio-connect/calendar/feature-location-matching": [
+        "libs/calendar/feature-location-matching/src/index.ts"
       ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

@@ -2,28 +2,28 @@
   class="event-list sc-scrollbar"
   (scroll)="$any($event.target).scrollTop + $any($event.target).clientHeight >= $any($event.target).scrollHeight - 50 && loadMore()"
 >
-  @if (isLoading() && dayEvents().length === 0) {
+  @if (isLoading() && visibleDayEvents().length === 0) {
     <div class="event-list__loader">
       <sc-ui-spinner [diameter]="36" />
     </div>
   }
 
-  @if (!isLoading() && dayEvents().length === 0) {
+  @if (!isLoading() && visibleDayEvents().length === 0) {
     <div class="event-list__empty">
       <span class="material-icons-round" style="font-size:48px;color:#e0e0e0">event_busy</span>
       <p>No events on this day</p>
     </div>
   }
 
-  @for (event of dayEvents(); track event.id) {
+  @for (event of visibleDayEvents(); track event.id) {
     <sc-day-event-item
       [event]="event"
       [isPastDay]="isPastDay()"
       [isActionPending]="isActionPending(event.id)"
       [showDismissed]="filters().showDismissed"
-      (onUse)="useEvent(event)"
-      (onDismiss)="dismissEvent(event, $event)"
-      (onRestore)="restoreEvent(event)"
+      (use)="useEvent(event)"
+      (dismiss)="dismissEvent(event, $event)"
+      (restore)="restoreEvent(event)"
     />
   }
 

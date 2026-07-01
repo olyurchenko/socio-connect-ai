@@ -7,6 +7,13 @@ import { CALENDAR_FEATURE_KEY } from './calendar.reducer';
 export const selectCalendarFeature =
   createFeatureSelector<CalendarState>(CALENDAR_FEATURE_KEY);
 
+// ─── Flow Navigation Selectors ────────────────────────────────────────────────
+
+export const selectCurrentStepIndex = createSelector(
+  selectCalendarFeature,
+  (state) => state.currentStepIndex,
+);
+
 // ─── Filter Selectors ─────────────────────────────────────────────────────────
 
 export const selectFilters = createSelector(

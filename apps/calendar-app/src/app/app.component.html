@@ -5,6 +5,7 @@
     [opened]="true"
     [hasBackdrop]="false"
     position="start"
+    [style.--sc-sidenav-width]="isLocationMatchingStep() ? '520px' : null"
   >
     <ng-container sidenavContent>
       <div class="nav-header">
@@ -27,9 +28,15 @@
             <span class="nav-item__label">{{ item.label }}</span>
           </a>
         }
-
-        <sc-filter-panel />
       </nav>
+
+      <div class="nav-panel">
+        @if (isLocationMatchingStep()) {
+          <sc-location-sidebar />
+        } @else {
+          <sc-filter-panel />
+        }
+      </div>
     </ng-container>
 
     <ng-container mainContent>

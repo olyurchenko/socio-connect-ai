@@ -1,0 +1,13 @@
+@if (event()) {
+  <div class="lm-step">
+    <div class="lm-step__body">
+      @if (isInitialLoading()) {
+        <div class="lm-step__loader">
+          <sc-ui-spinner [diameter]="40" />
+        </div>
+      } @else {
+        <sc-location-map class="lm-step__map" />
+      }
+    </div>
+  </div>
+}

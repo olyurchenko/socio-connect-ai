@@ -4,6 +4,24 @@
   overflow: hidden;
 }
 
+.app-nav {
+  mat-sidenav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  // Material projects drawer content into its own internal wrapper
+  // (block-level, overflow: auto), so the flex column above only
+  // governs that wrapper's own box — it must also be a flex column
+  // for nav-header/nav-menu/nav-panel to lay out and size correctly.
+  .mat-drawer-inner-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+}
+
 .nav-header {
   padding: 20px var(--sc-spacing-md);
   border-bottom: 1px solid var(--sc-color-outline);
@@ -36,10 +54,19 @@
 }
 
 .nav-menu {
+  flex-shrink: 0;
   padding: var(--sc-spacing-sm) var(--sc-spacing-sm);
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.nav-panel {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .nav-item {

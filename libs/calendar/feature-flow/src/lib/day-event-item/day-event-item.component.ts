@@ -27,9 +27,9 @@ export class DayEventItemComponent {
   protected readonly isDismissing = signal(false);
   protected readonly dismissReason = signal('');
 
-  readonly onUse = output<void>();
-  readonly onDismiss = output<string | undefined>();
-  readonly onRestore = output<void>();
+  readonly use = output<void>();
+  readonly dismiss = output<string | undefined>();
+  readonly restore = output<void>();
 
   startDismiss(): void {
     this.isDismissing.set(true);
@@ -42,7 +42,7 @@ export class DayEventItemComponent {
   }
 
   confirmDismiss(): void {
-    this.onDismiss.emit(this.dismissReason() || undefined);
+    this.dismiss.emit(this.dismissReason() || undefined);
     this.isDismissing.set(false);
     this.dismissReason.set('');
   }

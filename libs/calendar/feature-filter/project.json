@@ -1,0 +1,26 @@
+{
+  "name": "calendar-feature-filter",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/calendar/feature-filter/src",
+  "prefix": "sc",
+  "tags": ["scope:calendar", "type:feature"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/calendar/feature-filter/**/*.ts",
+          "libs/calendar/feature-filter/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/calendar/feature-filter/jest.config.ts"
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@ import {
   EventTypeCounts,
 } from './event.models';
 import { CalendarFilters } from './filter.models';
+import { CategoryOption, MatchedLocation, RegionOption } from './location-matching.models';
 
 // ─── Async State Helpers ──────────────────────────────────────────────────────
 
@@ -23,6 +24,8 @@ export function createAsyncData<T>(initialData: T): AsyncData<T> {
 // ─── NgRx Calendar State ──────────────────────────────────────────────────────
 
 export interface CalendarState {
+  currentStepIndex: number;
+
   filters: CalendarFilters;
 
   monthEvents: CalendarEvent[];
@@ -47,4 +50,26 @@ export interface CalendarState {
   pendingEventActionId: string | null;
   eventActionLoadingState: LoadingState;
   eventActionError: string | null;
+}
+
+// ─── NgRx Location Matching State ─────────────────────────────────────────────
+
+export interface LocationMatchingState {
+  event: CalendarEvent | null;
+
+  regions: RegionOption[];
+  regionsLoadingState: LoadingState;
+
+  categories: CategoryOption[];
+  categoriesLoadingState: LoadingState;
+
+  radiusMeters: number | null;
+  radiusLoadingState: LoadingState;
+
+  locations: MatchedLocation[];
+  locationsLoadingState: LoadingState;
+  locationsError: string | null;
+
+  activeRegionIds: string[];
+  activeCategoryIds: string[];
 }

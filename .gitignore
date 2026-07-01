@@ -40,3 +40,5 @@ terraform/terraform.tfvars
 *.ntvs*
 *.njsproj
 *.sln
+
+.angular

@@ -50,10 +50,13 @@ export class CalendarGridComponent {
   // ─── Derived Signals ─────────────────────────────────────────────────────────
 
   protected readonly calendarDays = computed<CalendarDay[]>(() => {
-    const { month } = this.filters();
+    const { month, showDismissed } = this.filters();
     if (!month) return [];
     const [year, monthNum] = month.split('-').map(Number);
-    return this.buildCalendarDays(year, monthNum, this.allMonthEvents(), this.eventLabels());
+    const events = showDismissed
+      ? this.allMonthEvents()
+      : this.allMonthEvents().filter((e) => e.status !== EventStatus.DISMISSED);
+    return this.buildCalendarDays(year, monthNum, events, this.eventLabels());
   });
 
   protected readonly currentMonthLabel = computed(() => {
@@ -146,16 +149,16 @@ export class CalendarGridComponent {
 
   getEventTypeClass(type: EventType): string {
     return {
-      [EventType.LOCATION]: 'event--location',
-      [EventType.CALENDAR]: 'event--calendar',
-      [EventType.WEATHER]: 'event--weather',
+      [EventType.LOCATION]: 'event-block--location',
+      [EventType.CALENDAR]: 'event-block--calendar',
+      [EventType.WEATHER]: 'event-block--weather',
     }[type] ?? '';
   }
 
   getEventStatusClass(status: EventStatus): string {
     return {
-      [EventStatus.USED]: 'event--used',
-      [EventStatus.DISMISSED]: 'event--dismissed',
+      [EventStatus.USED]: 'event-block--used',
+      [EventStatus.DISMISSED]: 'event-block--dismissed',
       [EventStatus.ACTIVE]: '',
     }[status] ?? '';
   }

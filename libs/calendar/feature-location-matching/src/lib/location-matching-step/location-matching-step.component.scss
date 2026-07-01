@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.lm-step {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+
+  &__body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  &__loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+
+  &__map {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+  }
+}

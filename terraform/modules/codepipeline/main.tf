@@ -105,6 +105,17 @@ data "aws_iam_policy_document" "codebuild_policy" {
     ]
     resources = ["*"]
   }
+
+  statement {
+    sid    = "SSMGoogleMapsApiKey"
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameter",
+    ]
+    resources = [
+      "arn:aws:ssm:*:*:parameter${var.google_maps_api_key_parameter_name}",
+    ]
+  }
 }
 
 resource "aws_iam_role_policy" "codebuild" {
@@ -201,6 +212,11 @@ resource "aws_codebuild_project" "build" {
       name  = "NX_APP_NAME"
       value = var.nx_app_name
     }
+
+    environment_variable {
+      name  = "GOOGLE_MAPS_API_KEY_PARAM"
+      value = var.google_maps_api_key_parameter_name
+    }
   }
 
   source {
@@ -214,6 +230,15 @@ resource "aws_codebuild_project" "build" {
           }
           commands = [
             "npm ci --prefer-offline"
+          ]
+        }
+        pre_build = {
+          commands = [
+            # Fetch the Google Maps API key from Parameter Store and ship it as a
+            # static config.json asset, so the app can fetch it via APP_INITIALIZER
+            # at runtime instead of baking it into the JS bundle.
+            "MAPS_KEY=$(aws ssm get-parameter --name \"$GOOGLE_MAPS_API_KEY_PARAM\" --query 'Parameter.Value' --output text)",
+            "echo \"{\\\"googleMapsApiKey\\\":\\\"$MAPS_KEY\\\"}\" > apps/$NX_APP_NAME/public/config.json"
           ]
         }
         build = {
@@ -280,9 +305,11 @@ resource "aws_codebuild_project" "deploy" {
         build = {
           commands = [
             # Sync hashed assets with long-lived caching
-            "aws s3 sync . s3://$S3_BUCKET --delete --exclude 'index.html' --cache-control 'public, max-age=31536000, immutable'",
+            "aws s3 sync . s3://$S3_BUCKET --delete --exclude 'index.html' --exclude 'config.json' --cache-control 'public, max-age=31536000, immutable'",
             # Upload index.html with no-cache so browsers always get the latest entry point
             "aws s3 cp index.html s3://$S3_BUCKET/index.html --cache-control 'no-cache, no-store, must-revalidate'",
+            # Upload config.json with no-cache — it's not content-hashed and changes independently of the JS bundle
+            "aws s3 cp config.json s3://$S3_BUCKET/config.json --cache-control 'no-cache, no-store, must-revalidate'",
             # Invalidate CloudFront so the new index.html is served immediately
             "aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths '/*'"
           ]

@@ -40,6 +40,9 @@
       ],
       "@socio-connect/calendar/feature-location-matching": [
         "libs/calendar/feature-location-matching/src/index.ts"
+      ],
+      "@socio-connect/shared/app-config": [
+        "libs/shared/app-config/src/index.ts"
       ]
     }
   },

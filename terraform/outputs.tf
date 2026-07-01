@@ -37,3 +37,8 @@ output "github_connection_status" {
   description = "CodeStar GitHub connection status (PENDING until manually activated)"
   value       = module.codepipeline.github_connection_status
 }
+
+output "google_maps_api_key_parameter_name" {
+  description = "SSM Parameter Store name holding the Google Maps API key"
+  value       = aws_ssm_parameter.google_maps_api_key.name
+}

@@ -127,20 +127,33 @@ module "route53" {
   cloudfront_hosted_zone  = module.cloudfront.distribution_hosted_zone_id
 }
 
+# ─── SSM Parameter: Google Maps API Key ───────────────────────────────────────
+# Plain String (not SecureString) — this key is restricted via HTTP referrer/API
+# restrictions in Google Cloud Console, not by secrecy (see apps/calendar-app
+# config comment); it's fetched by CodeBuild and shipped as a public static
+# asset, so KMS encryption would add no protection.
+
+resource "aws_ssm_parameter" "google_maps_api_key" {
+  name  = "/${var.project_name}/${var.environment}/google-maps-api-key"
+  type  = "String"
+  value = var.google_maps_api_key
+}
+
 # ─── CI/CD Pipeline ───────────────────────────────────────────────────────────
 
 module "codepipeline" {
   source = "./modules/codepipeline"
 
-  project_name               = var.project_name
-  environment                = var.environment
-  aws_region                 = var.aws_region
-  github_owner               = var.github_owner
-  github_repo                = var.github_repo
-  github_branch              = var.github_branch
-  s3_bucket_name             = module.s3.bucket_id
-  cloudfront_distribution_id = module.cloudfront.distribution_id
-  nx_app_name                = var.nx_app_name
+  project_name                       = var.project_name
+  environment                        = var.environment
+  aws_region                         = var.aws_region
+  github_owner                       = var.github_owner
+  github_repo                        = var.github_repo
+  github_branch                      = var.github_branch
+  s3_bucket_name                     = module.s3.bucket_id
+  cloudfront_distribution_id         = module.cloudfront.distribution_id
+  nx_app_name                        = var.nx_app_name
+  google_maps_api_key_parameter_name = aws_ssm_parameter.google_maps_api_key.name
 
   depends_on = [module.s3, module.cloudfront]
 }

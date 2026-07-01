@@ -1,4 +1,4 @@
-import { ApplicationConfig, isDevMode } from '@angular/core';
+import { ApplicationConfig, inject, isDevMode } from '@angular/core';
 import {
   provideRouter,
   withComponentInputBinding,
@@ -17,8 +17,8 @@ import {
   locationMatchingFeature,
 } from '@socio-connect/calendar/data-access';
 import { GOOGLE_MAPS_API_KEY } from '@socio-connect/calendar/feature-location-matching';
+import { AppConfigService, provideAppConfigInitializer } from '@socio-connect/shared/app-config';
 import { appRoutes } from './app.routes';
-import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,13 +29,14 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi()),
+    provideAppConfigInitializer(),
     provideStore({
       router: routerReducer,
       [calendarFeature.name]: calendarFeature.reducer,
       [locationMatchingFeature.name]: locationMatchingFeature.reducer,
     }),
     provideEffects([CalendarEffects, LocationMatchingEffects]),
-    { provide: GOOGLE_MAPS_API_KEY, useValue: environment.googleMapsApiKey },
+    { provide: GOOGLE_MAPS_API_KEY, useFactory: () => inject(AppConfigService).googleMapsApiKey },
     provideRouterStore(),
     provideStoreDevtools({
       maxAge: 25,

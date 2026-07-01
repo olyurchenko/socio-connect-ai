@@ -54,6 +54,12 @@ variable "nx_app_name" {
   default     = "calendar-app"
 }
 
+variable "google_maps_api_key" {
+  description = "Google Maps JavaScript API key, stored in SSM Parameter Store and pulled in by CodeBuild at build time"
+  type        = string
+  sensitive   = true
+}
+
 variable "cloudfront_price_class" {
   description = "CloudFront price class"
   type        = string

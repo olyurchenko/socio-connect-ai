@@ -7,3 +7,5 @@ environment            = "production"
 domain_name            = "example.com"
 subdomain              = "calendar"
 cloudfront_price_class = "PriceClass_100"
+
+# google_maps_api_key = "<set via CI secret / local tfvars, never commit>"

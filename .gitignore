@@ -25,6 +25,9 @@ Thumbs.db
 .env.*
 !.env.example
 
+# Runtime app config (fetched from Parameter Store at build time — see config.example.json)
+apps/calendar-app/public/config.json
+
 # Terraform
 terraform/.terraform/
 terraform/*.tfstate

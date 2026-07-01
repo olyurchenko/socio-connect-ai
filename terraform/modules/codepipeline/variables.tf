@@ -44,3 +44,8 @@ variable "nx_app_name" {
   type        = string
   default     = "calendar-app"
 }
+
+variable "google_maps_api_key_parameter_name" {
+  description = "SSM Parameter Store name holding the Google Maps API key, fetched by CodeBuild at build time"
+  type        = string
+}
